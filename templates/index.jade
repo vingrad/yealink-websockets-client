@@ -1,0 +1,81 @@
+html
+  head
+    title= title
+    script(src="https://code.jquery.com/jquery-3.3.1.js")
+  body
+    h1= message
+    div
+      label websocket server url
+      input#websocket_url(type=text)
+      button#connect(type=text) Connect
+    div
+      input#number(type=text)
+      button#call(type="button") Call
+      button#info(type="button") Info
+      div
+        form#keys
+          
+    div#log
+
+
+  script.
+    $(document).ready(function() {
+        var socket;
+
+        $.get('/action_uri.js', function (s) {
+            console.log('s', s);
+            let keys = JSON.parse(s);
+            keys.forEach(function(item) {
+                $("#keys").append($('<button/>', {
+                    id: item.value,
+                    class: 'action',
+                    type: 'button',
+                    text: item.value
+                }))
+            })
+            $('.action').click(function(evt) {
+                var action = evt.target.innerHTML;
+                var command = JSON.stringify({type: 'key', key: action.toString()});
+                $('#log').append('<br/> << ' + command);
+                socket.send(command);
+            })
+        })
+
+        $('#connect').click(function() {
+            connect();
+        })
+
+
+        function connect () {
+            var ws_url = $('#websocket_url').val();
+            localStorage.setItem('ws_url', ws_url);
+            socket = new WebSocket(ws_url);
+
+            socket.onmessage = function (event) {
+                $('#log').append('<br/> >> ' + event.data);
+            }
+
+            $('#call').click(function(evt) {
+                var number = $('#number').val();
+                //console.log(number)
+                //console.log(socket)
+                var command = JSON.stringify({type: 'call', number: number.toString()})
+                $('#log').append('<br/> << ' + command);
+                socket.send(command);
+            })
+
+            $('#info').click(function(evt) {
+                var command = JSON.stringify({type: 'info'});
+                $('#log').append('<br/> << ' + command);
+                socket.send(command);
+            })
+        }
+
+        function init () {
+            var ws_url = localStorage.getItem('ws_url') || 'ws://echo.websocket.org';
+            $('#websocket_url').val(ws_url);
+        }
+
+        init();
+
+    });

@@ -1,0 +1,6 @@
+{
+  "locals": {
+    "title": "Yealink Websocket Phone Controller"
+  },
+  "output": "./docs"
+}
