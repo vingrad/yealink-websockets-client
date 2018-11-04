@@ -22,7 +22,7 @@ html
     $(document).ready(function() {
         var socket;
 
-        $.get('/action_uri.js', function (s) {
+        $.get('action_uri.js', function (s) {
             console.log('s', s);
             let keys = JSON.parse(s);
             keys.forEach(function(item) {
