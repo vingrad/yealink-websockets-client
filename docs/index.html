@@ -1,7 +1,7 @@
 <html><head><title>Yealink Websocket Phone Controller</title><script src="https://code.jquery.com/jquery-3.3.1.js"></script></head><body><h1></h1><div><label>websocket server url</label><input id="websocket_url"/><button id="connect">Connect</button></div><div><input id="number"/><button id="call" type="button">Call</button><button id="info" type="button">Info</button><div><form id="keys"></form></div></div><div id="log"></div></body><script>$(document).ready(function() {
     var socket;
 
-    $.get('/action_uri.js', function (s) {
+    $.get('action_uri.js', function (s) {
         console.log('s', s);
         let keys = JSON.parse(s);
         keys.forEach(function(item) {
